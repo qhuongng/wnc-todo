@@ -2,7 +2,11 @@ To run the development server:
 
 ```bash
 npm i
-# then
+```
+
+then
+
+```bash
 npm run dev
 ```
 
