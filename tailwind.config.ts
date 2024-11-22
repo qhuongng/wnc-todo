@@ -15,6 +15,22 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  daisyui: {
+    themes: [
+      {
+        lemonade: {
+          ...require("daisyui/src/theming/themes")["lemonade"],
+          "primary-content": "#ccffa3",
+          "accent": "#fadb02",
+          "accent-content": "#453c00",
+          "secondary": "#fa6502",
+          "secondary-content": "#ffffff",
+          "base-100": "#ffffff",
+        },
+      },
+    ],
+  },
+  plugins: [require("@tailwindcss/typography"), require("daisyui")],
 };
+
 export default config;
