@@ -26,21 +26,30 @@ const Home = () => {
     };
 
     const markTodo = (id: number) => {
-        const updatedTodos = todos.map((todo) => {
-            if (todo.id === id) {
-                return { ...todo, completed: !todo.completed };
-            }
+        setTodos(
+            todos.map((todo) => {
+                if (todo.id === id) {
+                    return { ...todo, completed: !todo.completed };
+                }
 
-            return todo;
-        });
+                return todo;
+            })
+        );
 
-        setTodos(updatedTodos);
-        setFilteredTodos(updatedTodos);
+        setFilteredTodos(
+            filteredTodos.map((todo) => {
+                if (todo.id === id) {
+                    return { ...todo, completed: !todo.completed };
+                }
+
+                return todo;
+            })
+        );
     };
 
     const filterTodo = (keyword: string) => {
-        setTodos(
-            filteredTodos.filter((todo) => {
+        setFilteredTodos(
+            todos.filter((todo) => {
                 return todo.content.toLowerCase().includes(keyword.toLowerCase());
             })
         );
@@ -55,7 +64,7 @@ const Home = () => {
                         <TodoForm addTodo={addTodo} />
                     </div>
 
-                    <TodoList todos={todos} markTodo={markTodo} />
+                    <TodoList todos={filteredTodos} markTodo={markTodo} />
                 </div>
             </div>
         </article>
