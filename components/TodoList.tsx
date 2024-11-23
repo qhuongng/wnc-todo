@@ -1,6 +1,5 @@
 import TodoItem from "./TodoItem";
-import { Todo } from "../lib/todos";
-import { Icon } from "@iconify/react/dist/iconify.js";
+import { Todo } from "@/lib/todos";
 
 interface TodoListProps {
     todos: Todo[];

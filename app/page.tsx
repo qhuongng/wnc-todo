@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import TodoForm from "./components/TodoForm";
-import Todos, { Todo } from "./lib/todos";
-import TodoList from "./components/TodoList";
-import TodoFilter from "./components/TodoFilter";
-import { set } from "react-hook-form";
+
+import TodoForm from "@/components/TodoForm";
+import TodoList from "@/components/TodoList";
+import TodoFilter from "@/components/TodoFilter";
+
+import Todos, { Todo } from "@/lib/todos";
 
 const Home = () => {
     const [todos, setTodos] = useState<Todo[]>(Todos());

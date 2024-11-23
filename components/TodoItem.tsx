@@ -1,4 +1,4 @@
-import { Todo } from "../lib/todos";
+import { Todo } from "@/lib/todos";
 import { Icon } from "@iconify/react/dist/iconify.js";
 
 interface TodoItemProps {
