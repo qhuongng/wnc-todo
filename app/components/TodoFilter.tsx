@@ -9,7 +9,7 @@ const TodoFilter: React.FC<TodoFilterProps> = ({ filterTodo }) => {
         <input
             type="text"
             placeholder="Search for a to-do"
-            className="input input-bordered w-full max-w-xl"
+            className="input input-bordered w-full max-w-md"
             onChange={(e: ChangeEvent) => {
                 if (e.target instanceof HTMLInputElement) {
                     filterTodo(e.target.value);
