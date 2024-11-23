@@ -1,10 +1,11 @@
 import React, { ChangeEvent } from "react";
 
-interface TodoFilterProps {
-    filterTodo: (keyword: string) => void;
-}
+import { filterTodo } from "@/lib/redux/todosSlice";
+import { useAppDispatch } from "@/lib/hooks";
 
-const TodoFilter: React.FC<TodoFilterProps> = ({ filterTodo }) => {
+const TodoFilter: React.FC = () => {
+    const dispatch = useAppDispatch();
+
     return (
         <input
             type="text"
@@ -12,7 +13,7 @@ const TodoFilter: React.FC<TodoFilterProps> = ({ filterTodo }) => {
             className="input input-bordered w-full max-w-md"
             onChange={(e: ChangeEvent) => {
                 if (e.target instanceof HTMLInputElement) {
-                    filterTodo(e.target.value);
+                    dispatch(filterTodo(e.target.value));
                 }
             }}
         />

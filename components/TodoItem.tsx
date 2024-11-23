@@ -1,12 +1,16 @@
-import { Todo } from "@/lib/todos";
 import { Icon } from "@iconify/react/dist/iconify.js";
+
+import { markTodo } from "@/lib/redux/todosSlice";
+import { useAppDispatch } from "@/lib/hooks";
+import { Todo } from "@/lib/todos";
 
 interface TodoItemProps {
     todo: Todo;
-    markTodo: (id: number) => void;
 }
 
-const TodoItem: React.FC<TodoItemProps> = ({ todo, markTodo }) => {
+const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
+    const dispatch = useAppDispatch();
+
     return (
         <div className="flex rounded-xl bg-slate-50 shadow-xl mb-4 px-4 items-center justify-between">
             <p
@@ -20,7 +24,7 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo, markTodo }) => {
             {!todo.completed && (
                 <button
                     className="btn btn-square btn-primary ml-8"
-                    onClick={() => markTodo(todo.id)}
+                    onClick={() => dispatch(markTodo(todo.id))}
                 >
                     <Icon icon="ic:round-check" style={{ fontSize: "24px" }} />
                 </button>

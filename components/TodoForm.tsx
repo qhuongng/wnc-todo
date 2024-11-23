@@ -2,15 +2,16 @@ import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Icon } from "@iconify/react";
 
-interface TodoFormProps {
-    addTodo: (content: string) => void;
-}
+import { addTodo } from "@/lib/redux/todosSlice";
+import { useAppDispatch } from "@/lib/hooks";
 
 interface TodoInput {
     content: string;
 }
 
-const TodoForm: React.FC<TodoFormProps> = ({ addTodo }) => {
+const TodoForm: React.FC = () => {
+    const dispatch = useAppDispatch();
+
     const {
         register,
         handleSubmit,
@@ -20,7 +21,7 @@ const TodoForm: React.FC<TodoFormProps> = ({ addTodo }) => {
     } = useForm<TodoInput>();
 
     const onSubmit: SubmitHandler<TodoInput> = (data) => {
-        addTodo(data.content);
+        dispatch(addTodo(data.content));
         reset();
     };
 

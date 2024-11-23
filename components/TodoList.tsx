@@ -1,16 +1,15 @@
 import TodoItem from "./TodoItem";
-import { Todo } from "@/lib/todos";
 
-interface TodoListProps {
-    todos: Todo[];
-    markTodo: (id: number) => void;
-}
+import { useAppSelector } from "@/lib/hooks";
+import { RootState } from "@/lib/store";
 
-const TodoList: React.FC<TodoListProps> = ({ todos, markTodo }) => {
+const TodoList = () => {
+    const todos = useAppSelector((state: RootState) => state.todos.filteredTodos);
+
     return (
         <div className="flex flex-col pb-8 px-8">
-            {todos.map((todo: Todo) => (
-                <TodoItem key={todo.id} todo={todo} markTodo={markTodo} />
+            {todos.map((todo) => (
+                <TodoItem key={todo.id} todo={todo} />
             ))}
         </div>
     );
