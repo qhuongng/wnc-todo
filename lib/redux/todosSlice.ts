@@ -2,12 +2,12 @@ import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { Todo } from "@/lib/todos";
 
-export interface TodosSliceState {
+export interface TodosState {
     todos: Array<Todo>;
     filteredTodos: Array<Todo>;
 }
 
-const initialState: TodosSliceState = {
+const initialState: TodosState = {
     todos: [],
     filteredTodos: [],
 };
