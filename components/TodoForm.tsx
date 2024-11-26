@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Icon } from "@iconify/react";
 

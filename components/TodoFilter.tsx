@@ -1,4 +1,6 @@
-import React, { ChangeEvent } from "react";
+"use client";
+
+import { ChangeEvent } from "react";
 
 import { filterTodo } from "@/lib/redux/todosSlice";
 import { useAppDispatch } from "@/lib/hooks";

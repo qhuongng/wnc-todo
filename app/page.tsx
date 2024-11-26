@@ -1,5 +1,3 @@
-"use client";
-
 import TodoForm from "@/components/TodoForm";
 import TodoList from "@/components/TodoList";
 import TodoFilter from "@/components/TodoFilter";
