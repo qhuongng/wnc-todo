@@ -23,14 +23,12 @@ const TodoList: React.FC<TodoListProps> = ({ todos, markTodo }) => {
                         {todo.content}
                     </p>
 
-                    {!todo.completed && (
-                        <button
-                            className="btn btn-square btn-primary ml-8"
-                            onClick={() => markTodo(todo.id)}
-                        >
-                            <Icon icon="ic:round-check" style={{ fontSize: "24px" }} />
-                        </button>
-                    )}
+                    <input
+                        type="checkbox"
+                        className="checkbox checkbox-lg checkbox-primary ml-4"
+                        checked={todo.completed}
+                        onClick={() => markTodo(todo.id)}
+                    />
                 </div>
             ))}
         </div>
