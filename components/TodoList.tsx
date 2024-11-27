@@ -1,5 +1,3 @@
-import { Icon } from "@iconify/react/dist/iconify.js";
-
 import { Todo } from "@/lib/todos";
 
 interface TodoListProps {
