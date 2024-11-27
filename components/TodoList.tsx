@@ -1,7 +1,5 @@
 "use client";
 
-import { Icon } from "@iconify/react/dist/iconify.js";
-
 import { useAppSelector, useAppDispatch } from "@/lib/hooks";
 import { RootState } from "@/lib/store";
 import { markTodo } from "@/lib/redux/todosSlice";
