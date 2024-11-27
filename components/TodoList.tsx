@@ -25,14 +25,12 @@ const TodoList = () => {
                         {todo.content}
                     </p>
 
-                    {!todo.completed && (
-                        <button
-                            className="btn btn-square btn-primary ml-8"
-                            onClick={() => dispatch(markTodo(todo.id))}
-                        >
-                            <Icon icon="ic:round-check" style={{ fontSize: "24px" }} />
-                        </button>
-                    )}
+                    <input
+                        type="checkbox"
+                        className="checkbox checkbox-lg checkbox-primary ml-4"
+                        checked={todo.completed}
+                        onClick={() => dispatch(markTodo(todo.id))}
+                    />
                 </div>
             ))}
         </div>
