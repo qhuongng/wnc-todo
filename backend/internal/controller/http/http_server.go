@@ -12,11 +12,12 @@ import (
 )
 
 type Server struct {
-	studentHandler *v1.StudentHandler
+	userHandler *v1.UserHandler
+	todoHandler *v1.TodoHandler
 }
 
-func NewServer(studentHandler *v1.StudentHandler) *Server {
-	return &Server{studentHandler: studentHandler}
+func NewServer(userHandler *v1.UserHandler, todoHandler *v1.TodoHandler) *Server {
+	return &Server{userHandler: userHandler, todoHandler: todoHandler}
 }
 
 func (s *Server) Run() {
@@ -27,7 +28,7 @@ func (s *Server) Run() {
 		Handler: router,
 	}
 
-	v1.MapRoutes(router, s.studentHandler)
+	v1.MapRoutes(router, s.userHandler, s.todoHandler)
 	err := httpServerInstance.ListenAndServe()
 	if err != nil {
 		return

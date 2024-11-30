@@ -24,15 +24,18 @@ var serverSet = wire.NewSet(
 
 // handler === controller | with service and repository layers to form 3 layers architecture
 var handlerSet = wire.NewSet(
-	v1.NewStudentHandler,
+	v1.NewUserHandler,
+	v1.NewTodoHandler,
 )
 
 var serviceSet = wire.NewSet(
-	serviceimplement.NewStudentService,
+	serviceimplement.NewUserService,
+	serviceimplement.NewTodoService,
 )
 
 var repositorySet = wire.NewSet(
-	repositoryimplement.NewStudentRepository,
+	repositoryimplement.NewUserRepository,
+	repositoryimplement.NewTodoRepository,
 )
 
 func InitializeContainer(

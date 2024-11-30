@@ -6,13 +6,18 @@ import (
 	"github.com/swaggo/gin-swagger"
 )
 
-func MapRoutes(router *gin.Engine, studentHandler *StudentHandler) {
+func MapRoutes(router *gin.Engine, userHandler *UserHandler, todoHandler *TodoHandler) {
 	v1 := router.Group("/api/v1")
 	{
-		students := v1.Group("/students")
+		users := v1.Group("/users")
 		{
-			students.GET("/", studentHandler.GetAll)
+			users.POST("/register", userHandler.Register)
+			users.POST("/login", userHandler.Login)
 		}
+		//todos:= v1.Group("/todos")
+		//{
+		//
+		//}
 	}
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 }

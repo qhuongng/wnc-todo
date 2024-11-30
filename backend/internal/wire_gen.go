@@ -19,10 +19,13 @@ import (
 // Injectors from wire.go:
 
 func InitializeContainer(db database.Db) *controller.ApiContainer {
-	studentRepository := repositoryimplement.NewStudentRepository(db)
-	studentService := serviceimplement.NewStudentService(studentRepository)
-	studentHandler := v1.NewStudentHandler(studentService)
-	server := http.NewServer(studentHandler)
+	userRepository := repositoryimplement.NewUserRepository(db)
+	userService := serviceimplement.NewUserService(userRepository)
+	userHandler := v1.NewUserHandler(userService)
+	todoRepository := repositoryimplement.NewTodoRepository(db)
+	todoService := serviceimplement.NewTodoService(todoRepository)
+	todoHandler := v1.NewTodoHandler(todoService)
+	server := http.NewServer(userHandler, todoHandler)
 	apiContainer := controller.NewApiContainer(server)
 	return apiContainer
 }
@@ -35,8 +38,8 @@ var container = wire.NewSet(controller.NewApiContainer)
 var serverSet = wire.NewSet(http.NewServer)
 
 // handler === controller | with service and repository layers to form 3 layers architecture
-var handlerSet = wire.NewSet(v1.NewStudentHandler)
+var handlerSet = wire.NewSet(v1.NewUserHandler, v1.NewTodoHandler)
 
-var serviceSet = wire.NewSet(serviceimplement.NewStudentService)
+var serviceSet = wire.NewSet(serviceimplement.NewUserService, serviceimplement.NewTodoService)
 
-var repositorySet = wire.NewSet(repositoryimplement.NewStudentRepository)
+var repositorySet = wire.NewSet(repositoryimplement.NewUserRepository, repositoryimplement.NewTodoRepository)
