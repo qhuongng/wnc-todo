@@ -32,7 +32,7 @@ func GenerateToken(userId int64, expTime time.Time, tokenType string) (string, e
 
 	return tokenString, nil
 }
-func VerifyToken(tokenString string, tokenType string) (string, error) {
+func VerifyToken(tokenString string, tokenType string) (int64, error) {
 	var key string
 
 	if tokenType == "access" {
@@ -40,7 +40,7 @@ func VerifyToken(tokenString string, tokenType string) (string, error) {
 	} else if tokenType == "refresh" {
 		key = secretKeyRefresh
 	} else {
-		return "", errors.New("Invalid token type")
+		return 0, errors.New("Invalid token type")
 	}
 
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
@@ -48,22 +48,23 @@ func VerifyToken(tokenString string, tokenType string) (string, error) {
 	})
 
 	if err != nil {
-		return "", err
+		return 0, err
 	}
 
 	if !token.Valid {
 		if tokenType == "access" {
-			return "", fmt.Errorf("invalid accessToken")
+			return 0, fmt.Errorf("invalid accessToken")
 		} else {
-			return "", fmt.Errorf("invalid refreshToken")
+			return 0, fmt.Errorf("invalid refreshToken")
 		}
 	}
 	if claims, ok := token.Claims.(jwt.MapClaims); ok {
-		if userId, ok := claims["userId"].(string); ok {
+		if userIdFloat, ok := claims["userId"].(float64); ok {
+			userId := int64(userIdFloat)
 			return userId, nil
 		}
-		return "", errors.New("userId not found in token")
+		return 0, errors.New("userId not found in token")
 	}
 
-	return "", errors.New("failed to parse token claims")
+	return 0, errors.New("failed to parse token claims")
 }

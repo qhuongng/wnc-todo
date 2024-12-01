@@ -9,5 +9,5 @@ import (
 type UserService interface {
 	Login(ctx context.Context, userRequest *model.UserRequest) (*entity.User, error)
 	Register(ctx context.Context, userRequest *model.UserRequest) (*entity.User, error)
-	CreateToken(ctx context.Context, user *entity.User, tokenType string) (string, error)
+	CreateToken(ctx context.Context, userId int64, tokenType string) (string, error)
 }

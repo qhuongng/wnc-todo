@@ -7,4 +7,6 @@ import (
 
 type TodoRepository interface {
 	AddNewTodo(c context.Context, todo *entity.Todo) error
+	UpdateTodo(c context.Context, todo *entity.Todo, todoId int64, userId int64) (*entity.Todo, error)
+	GetListTodo(c context.Context, userId int64, searchText string) ([]entity.Todo, error)
 }
