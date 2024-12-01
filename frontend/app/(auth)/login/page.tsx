@@ -24,7 +24,7 @@ const Login: React.FC = () => {
 
     const onSubmit: SubmitHandler<LoginInputs> = async (data) => {
         try {
-            const response = await fetch("http://localhost:3000/api/v1/users/login", {
+            const response = await fetch("http://localhost:3001/api/v1/users/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(data),
@@ -32,6 +32,7 @@ const Login: React.FC = () => {
 
             if (response.ok) {
                 const data = await response.json();
+                console.log(data);
                 redirect('/');
             } else {
                 console.log(("Thông tin đăng nhập không hợp lệ."));
