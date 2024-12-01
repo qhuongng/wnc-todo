@@ -43,7 +43,7 @@ func (handler *UserHandler) Login(c *gin.Context) {
 		return
 	}
 	//create accesstoken
-	accessToken, err := handler.userService.CreateToken(c, user, "access")
+	accessToken, err := handler.userService.CreateToken(c, user.Id, "access")
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, http_common.NewErrorResponse(http_common.Error{
 			Message: err.Error(), Field: "", Code: http_common.ErrorResponseCode.InternalServerError,
@@ -82,7 +82,7 @@ func (handler *UserHandler) Register(c *gin.Context) {
 		}))
 		return
 	}
-	accessToken, err := handler.userService.CreateToken(c, user, "access")
+	accessToken, err := handler.userService.CreateToken(c, user.Id, "access")
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, http_common.NewErrorResponse(http_common.Error{
 			Message: err.Error(), Field: "", Code: http_common.ErrorResponseCode.InternalServerError,

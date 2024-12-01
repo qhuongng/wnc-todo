@@ -57,30 +57,34 @@ func (service *UserService) Register(ctx context.Context, userRequest *model.Use
 	if err != nil {
 		return nil, err
 	}
-	_, err = service.CreateToken(ctx, currentUser, "refresh")
+	_, err = service.CreateToken(ctx, currentUser.Id, "refresh")
 	if err != nil {
 		return nil, err
 	}
 	return currentUser, nil
 }
 
-func (service *UserService) CreateToken(ctx context.Context, user *entity.User, tokenType string) (string, error) {
+func (service *UserService) CreateToken(ctx context.Context, userId int64, tokenType string) (string, error) {
+	currentUser, err := service.userRepository.GetUserById(ctx, userId)
+	if err != nil {
+		return "", err
+	}
 	if tokenType == "refresh" {
 		refreshTokenTime := time.Now().Add(constants.REFRESH_TOKEN_DURATION)
-		refreshToken, err := authentication.GenerateToken(user.Id, refreshTokenTime, "refresh")
+		refreshToken, err := authentication.GenerateToken(userId, refreshTokenTime, "refresh")
 		if err != nil {
 			return "", err
 		}
-		user.RefeshToken = refreshToken
+		currentUser.RefeshToken = refreshToken
 		//update user
-		_, err = service.userRepository.UpdateUser(ctx, user, user.Id)
+		_, err = service.userRepository.UpdateUser(ctx, currentUser, currentUser.Id)
 		if err != nil {
 			return "", err
 		}
 		return refreshToken, nil
 	} else if tokenType == "access" {
 		accessTokenTime := time.Now().Add(constants.ACCESS_TOKEN_DURATION)
-		accessToken, err := authentication.GenerateToken(user.Id, accessTokenTime, "access")
+		accessToken, err := authentication.GenerateToken(userId, accessTokenTime, "access")
 		if err != nil {
 			return "", err
 		}

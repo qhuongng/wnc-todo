@@ -31,7 +31,7 @@ func (repo *UserRepository) GetUserByName(c context.Context, username string) (*
 	}
 	return &user, nil
 }
-func (repo *UserRepository) GetUserById(c context.Context, userId string) (*entity.User, error) {
+func (repo *UserRepository) GetUserById(c context.Context, userId int64) (*entity.User, error) {
 	var user entity.User
 	err := repo.db.WithContext(c).First(&user, userId).Error
 	if err != nil {
