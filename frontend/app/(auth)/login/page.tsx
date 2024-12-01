@@ -1,9 +1,10 @@
 "use client";
 
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { redirect } from "next/navigation";
+import Link from "next/link";
 import { useAppDispatch } from "@/lib/hooks";
+import { setUsername } from "@/lib/redux/userSlice";
 
 interface LoginInputs {
     username: string,
@@ -13,11 +14,11 @@ interface LoginInputs {
 const Login: React.FC = () => {
 
     const dispatch = useAppDispatch();
+    const router = useRouter();
 
     const {
         register,
         handleSubmit,
-        getValues,
         reset,
         formState: { errors },
     } = useForm<LoginInputs>();
@@ -32,8 +33,8 @@ const Login: React.FC = () => {
 
             if (response.ok) {
                 const data = await response.json();
-                console.log(data);
-                redirect('/');
+                dispatch(setUsername(data.data));
+                router.push('/');
             } else {
                 console.log(("Thông tin đăng nhập không hợp lệ."));
             }

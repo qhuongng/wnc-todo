@@ -16,9 +16,8 @@ const TodoList = () => {
                     className="flex rounded-xl bg-slate-50 shadow-xl mb-4 px-4 items-center justify-between"
                 >
                     <p
-                        className={`font-semibold text-lg text-wrap ${
-                            todo.completed ? "text-slate-400 line-through" : "text-slate-800"
-                        }`}
+                        className={`font-semibold text-lg text-wrap ${todo.completed ? "text-slate-400 line-through" : "text-slate-800"
+                            }`}
                     >
                         {todo.content}
                     </p>
@@ -27,7 +26,7 @@ const TodoList = () => {
                         type="checkbox"
                         className="checkbox checkbox-lg checkbox-primary ml-4"
                         checked={todo.completed}
-                        onClick={() => dispatch(markTodo(todo.id))}
+                        onChange={() => dispatch(markTodo(todo.id))}
                     />
                 </div>
             ))}
