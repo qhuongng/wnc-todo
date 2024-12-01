@@ -32,6 +32,7 @@ const Login: React.FC = () => {
             });
 
             if (response.ok) {
+                reset();
                 const data = await response.json();
                 dispatch(setUsername(data.data));
                 router.push('/');
@@ -41,7 +42,7 @@ const Login: React.FC = () => {
         } catch (error) {
             console.log(error);
         }
-        reset();
+
     };
 
     return (
