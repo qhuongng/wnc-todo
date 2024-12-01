@@ -8,6 +8,7 @@ import (
 )
 
 func MapRoutes(router *gin.Engine, userHandler *UserHandler, todoHandler *TodoHandler) {
+	router.Use(middleware.CorsMiddleware())
 	v1 := router.Group("/api/v1")
 	{
 		users := v1.Group("/users")
