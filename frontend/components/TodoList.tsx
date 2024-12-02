@@ -3,10 +3,26 @@
 import { useAppSelector, useAppDispatch } from "@/lib/hooks";
 import { RootState } from "@/lib/store";
 import { markTodo } from "@/lib/redux/todosSlice";
+import { fetchTodos } from "@/lib/redux/todosApi";
+import { useEffect } from "react";
 
 const TodoList = () => {
     const todos = useAppSelector((state: RootState) => state.todos.filteredTodos);
+    const status = useAppSelector((state: RootState) => state.todos.status);
     const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        dispatch(fetchTodos());
+    }, [dispatch]);
+
+    if (status === 'pending') return (
+        <div className="flex flex-col space-y-4 px-5">
+            <div className="skeleton w-full h-32" />
+            <div className="skeleton w-full h-32" />
+        </div>
+    );
+
+    if (status === 'idle') return <p className="flex items-center justify-center">Chưa có việc cần làm!</p>;
 
     return (
         <div className="flex flex-col pb-8 px-8">

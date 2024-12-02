@@ -5,20 +5,28 @@ import { Todo } from "@/lib/todos";
 export interface TodosState {
     todos: Array<Todo>;
     filteredTodos: Array<Todo>;
+    status: string,
 }
 
 const initialState: TodosState = {
     todos: [],
     filteredTodos: [],
+    status: "idle",
 };
 
 export const todosSlice = createSlice({
     name: "todos",
     initialState,
     reducers: {
-        fetchTodos: (state, action: PayloadAction<Array<Todo>>) => {
+        fetchTodosPending: (state) => {
+            state.status = 'pending';
+        },
+        fetchTodosSuccess: (state, action: PayloadAction<Array<Todo>>) => {
             state.todos = action.payload;
             state.filteredTodos = action.payload;
+        },
+        fetchTodosFailure: (state) => {
+            state.status = 'idle';
         },
         addTodo: (state, action: PayloadAction<string>) => {
             const newTodo: Todo = {
@@ -49,5 +57,5 @@ export const todosSlice = createSlice({
     },
 });
 
-export const { fetchTodos, addTodo, markTodo, filterTodo } = todosSlice.actions;
+export const { fetchTodosSuccess, fetchTodosFailure, fetchTodosPending, addTodo, markTodo, filterTodo } = todosSlice.actions;
 export const todosReducer = todosSlice.reducer;

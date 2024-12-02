@@ -5,6 +5,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import Link from "next/link";
 import { useAppDispatch } from "@/lib/hooks";
 import { setUsername } from "@/lib/redux/userSlice";
+import { useState } from "react";
 
 interface LoginInputs {
     username: string,
@@ -15,12 +16,13 @@ const Login: React.FC = () => {
 
     const dispatch = useAppDispatch();
     const router = useRouter();
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
     const {
         register,
         handleSubmit,
         reset,
-        formState: { errors },
+        formState: { errors, isSubmitting },
     } = useForm<LoginInputs>();
 
     const onSubmit: SubmitHandler<LoginInputs> = async (data) => {
@@ -33,14 +35,16 @@ const Login: React.FC = () => {
 
             if (response.ok) {
                 reset();
+                setErrorMessage("");
                 const data = await response.json();
                 dispatch(setUsername(data.data));
                 router.push('/');
             } else {
-                console.log(("Thông tin đăng nhập không hợp lệ."));
+                const data = await response.json();
+                setErrorMessage(data.message || "Thông tin đăng nhập không hợp lệ.");
             }
         } catch (error) {
-            console.log(error);
+            setErrorMessage("Đã xảy ra lỗi kết nối với máy chủ");
         }
 
     };
@@ -83,11 +87,17 @@ const Login: React.FC = () => {
                             <span className="text-red-500">Mật khẩu không được bỏ trống!</span>
                         )}
                     </div>
+                    {errorMessage && (
+                        <div className="mb-4 text-sm text-red-500 text-center">
+                            {errorMessage}
+                        </div>
+                    )}
                     <button
                         type="submit"
+                        disabled={isSubmitting}
                         className="w-full px-4 py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
                     >
-                        Đăng nhập
+                        {isSubmitting ? "Đang đăng nhập" : "Đăng nhập"}
                     </button>
                 </form>
                 <p className="mt-4 text-sm text-center text-gray-600">
