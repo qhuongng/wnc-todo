@@ -32,3 +32,24 @@ func (service *TodoService) AddNewTodo(ctx context.Context, todoRequest *model.T
 	}
 	return &newTodo[0], nil
 }
+
+func (service *TodoService) UpdateTodo(ctx context.Context, todoRequest *model.TodoRequest, todoId int64) (*entity.Todo, error) {
+	todo := &entity.Todo{
+		Content:   todoRequest.Content,
+		UserId:    todoRequest.UserId,
+		Completed: todoRequest.Completed,
+	}
+	updateTodo, err := service.todoRepository.UpdateTodo(ctx, todo, todoId, todoRequest.UserId)
+	if err != nil {
+		return nil, err
+	}
+	return updateTodo, nil
+}
+
+func (service *TodoService) GetListTodo(ctx context.Context, userId int64, searchText string) ([]entity.Todo, error) {
+	todoList, err := service.todoRepository.GetListTodo(ctx, userId, searchText)
+	if err != nil {
+		return nil, err
+	}
+	return todoList, nil
+}

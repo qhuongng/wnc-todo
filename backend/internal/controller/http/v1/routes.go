@@ -20,6 +20,8 @@ func MapRoutes(router *gin.Engine, userHandler *UserHandler, todoHandler *TodoHa
 		todos.Use(middleware.VerifyTokenMiddleware)
 		{
 			todos.POST("/", todoHandler.Add)
+			todos.PUT("/:id", todoHandler.Update)
+			todos.GET("/", todoHandler.GetList)
 		}
 	}
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

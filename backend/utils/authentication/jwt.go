@@ -34,7 +34,6 @@ func GenerateToken(userId int64, expTime time.Time, tokenType string) (string, e
 }
 func VerifyToken(tokenString string, tokenType string) (int64, error) {
 	var key string
-
 	if tokenType == "access" {
 		key = secretKeyAccess
 	} else if tokenType == "refresh" {
@@ -44,6 +43,9 @@ func VerifyToken(tokenString string, tokenType string) (int64, error) {
 	}
 
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+		}
 		return []byte(key), nil
 	})
 
@@ -59,6 +61,7 @@ func VerifyToken(tokenString string, tokenType string) (int64, error) {
 		}
 	}
 	if claims, ok := token.Claims.(jwt.MapClaims); ok {
+		fmt.Println(claims)
 		if userIdFloat, ok := claims["userId"].(float64); ok {
 			userId := int64(userIdFloat)
 			return userId, nil
