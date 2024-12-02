@@ -9,6 +9,12 @@ import (
 
 func MapRoutes(router *gin.Engine, userHandler *UserHandler, todoHandler *TodoHandler) {
 	router.Use(middleware.CorsMiddleware())
+	//router.Use(cors.New(cors.Config{
+	//	AllowOrigins:     []string{"http://localhost:3000"},
+	//	AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+	//	AllowHeaders:     []string{"Content-Type", "Authorization"},
+	//	AllowCredentials: true,
+	//}))
 	v1 := router.Group("/api/v1")
 	{
 		users := v1.Group("/users")

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/qhuongng/wnc-todo/tree/add-redux/backend/internal/domain/entity"
 	"os"
 	"time"
 )
@@ -11,10 +12,10 @@ import (
 var secretKeyAccess = os.Getenv("JWT_ACCESS_SECRET_KEY")
 var secretKeyRefresh = os.Getenv("JWT_REFRESH_SECRET_KEY")
 
-func GenerateToken(userId int64, expTime time.Time, tokenType string) (string, error) {
+func GenerateToken(user *entity.User, expTime time.Time, tokenType string) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256,
 		jwt.MapClaims{
-			"userId": userId,
+			"userId": user.Id,
 			"exp":    expTime.Unix(),
 		})
 	var key string

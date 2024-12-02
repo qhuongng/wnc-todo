@@ -10,26 +10,28 @@ import (
 )
 
 func VerifyTokenMiddleware(c *gin.Context) {
-	accessToken, err := c.Request.Cookie("access_token")
-	if err != nil {
+	//accessToken, err := c.Request.Cookie("access_token")
+	accessToken := c.GetHeader("access_token")
+	if accessToken == "" {
 		c.AbortWithStatusJSON(http.StatusUnauthorized, http_common.NewErrorResponse(http_common.Error{
-			Message: err.Error(), Field: "access_token", Code: http_common.ErrorResponseCode.Unauthorized,
+			Message: "Missing access token", Field: "access_token", Code: http_common.ErrorResponseCode.Unauthorized,
 		}))
 		return
 	}
 	//check accesstoken
-	userId, err := authentication.VerifyToken(accessToken.Value, "access")
+	userId, err := authentication.VerifyToken(accessToken, "access")
 	if err != nil {
 		if errors.Is(err, jwt.ErrTokenExpired) {
 			//check refreshtoken
-			refreshToken, err := c.Request.Cookie("refresh_token")
-			if err != nil {
+			//refreshToken, err := c.Request.Cookie("refresh_token")
+			refreshToken := c.GetHeader("refresh_token")
+			if refreshToken == "" {
 				c.AbortWithStatusJSON(http.StatusUnauthorized, http_common.NewErrorResponse(http_common.Error{
-					Message: err.Error(), Field: "refresh_token", Code: http_common.ErrorResponseCode.Unauthorized,
+					Message: "Missing refresh token", Field: "refresh_token", Code: http_common.ErrorResponseCode.Unauthorized,
 				}))
 				return
 			}
-			userId, err = authentication.VerifyToken(refreshToken.Value, "refresh")
+			userId, err = authentication.VerifyToken(refreshToken, "refresh")
 			if err != nil {
 				if errors.Is(err, jwt.ErrTokenExpired) {
 					c.AbortWithStatusJSON(http.StatusUnauthorized, http_common.NewErrorResponse(http_common.Error{

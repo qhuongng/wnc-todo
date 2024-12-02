@@ -5,7 +5,6 @@ import (
 	"github.com/qhuongng/wnc-todo/tree/add-redux/backend/internal/domain/http_common"
 	"github.com/qhuongng/wnc-todo/tree/add-redux/backend/internal/domain/model"
 	"github.com/qhuongng/wnc-todo/tree/add-redux/backend/internal/service"
-	"github.com/qhuongng/wnc-todo/tree/add-redux/backend/utils/constants"
 	"net/http"
 )
 
@@ -51,9 +50,13 @@ func (handler *UserHandler) Login(c *gin.Context) {
 		return
 	}
 	// set access token
-	c.SetCookie("access_token", accessToken, constants.COOKIE_DURATION, "/", "", false, true)
+	c.Header("access_token", accessToken)
 	// set refresh token
-	c.SetCookie("refresh_token", user.RefeshToken, constants.COOKIE_DURATION, "/", "", false, true)
+	c.Header("refresh_token", user.RefeshToken)
+	//c.SetCookie("access_token", accessToken, constants.COOKIE_DURATION, "/", "", false, true)
+	//// set refresh token
+	//c.SetCookie("refresh_token", user.RefeshToken, constants.COOKIE_DURATION, "/", "", false, true)
+
 	c.JSON(http.StatusOK, http_common.NewSuccessResponse[string](&user.Username))
 }
 
@@ -89,8 +92,16 @@ func (handler *UserHandler) Register(c *gin.Context) {
 		}))
 		return
 	}
-	c.SetCookie("access_token", accessToken, constants.COOKIE_DURATION, "/", "", false, true)
+	// set access token
+	c.Header("access_token", accessToken)
 	// set refresh token
-	c.SetCookie("refresh_token", user.RefeshToken, constants.COOKIE_DURATION, "/", "", false, true)
+	c.Header("refresh_token", user.RefeshToken)
+	//c.SetCookie("access_token", accessToken, constants.COOKIE_DURATION, "/", "", false, true)
+	//// set refresh token
+	//c.SetCookie("refresh_token", user.RefeshToken, constants.COOKIE_DURATION, "/", "", false, true)
 	c.JSON(http.StatusOK, http_common.NewSuccessResponse[string](&user.Username))
+}
+
+func (handler *UserHandler) Logout(c *gin.Context) {
+
 }
