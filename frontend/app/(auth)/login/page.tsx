@@ -6,6 +6,8 @@ import Link from "next/link";
 import { useAppDispatch } from "@/lib/hooks";
 import { setUsername } from "@/lib/redux/userSlice";
 import { useState } from "react";
+import Cookies from "js-cookie";
+
 
 interface LoginInputs {
     username: string,
@@ -36,8 +38,10 @@ const Login: React.FC = () => {
             if (response.ok) {
                 reset();
                 setErrorMessage("");
-                const data = await response.json();
-                dispatch(setUsername(data.data));
+                const responseData = await response.json();
+                Cookies.set("accessToken", responseData.data.access_token);
+                Cookies.set("refreshToken", responseData.data.refresh_token);
+                dispatch(setUsername(responseData.data.username));
                 router.push('/');
             } else {
                 const data = await response.json();

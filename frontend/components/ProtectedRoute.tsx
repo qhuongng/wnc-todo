@@ -1,7 +1,7 @@
 "use client";
 
-import { useSelector, useDispatch } from "react-redux";
-import { RootState, AppDispatch } from "@/lib/store";
+import { useSelector } from "react-redux";
+import { RootState } from "@/lib/store";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -13,13 +13,12 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 
     const storedUser = useSelector((state: RootState) => state.user.username);
     const router = useRouter();
-    const dispatch = useDispatch<AppDispatch>();
 
     useEffect(() => {
         if (storedUser === null) {
             router.push("/login");
         }
-    }, [router, dispatch]);
+    }, [router]);
 
     return <div>{children}</div>;
 };
