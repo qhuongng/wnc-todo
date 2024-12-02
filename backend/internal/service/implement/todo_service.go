@@ -22,15 +22,12 @@ func (service *TodoService) AddNewTodo(ctx context.Context, todoRequest *model.T
 		UserId:    todoRequest.UserId,
 		Completed: false,
 	}
-	err := service.todoRepository.AddNewTodo(ctx, todo)
+	todoId, err := service.todoRepository.AddNewTodo(ctx, todo)
 	if err != nil {
 		return nil, err
 	}
-	newTodo, err := service.todoRepository.GetListTodo(ctx, todoRequest.UserId, todoRequest.Content)
-	if err != nil {
-		return nil, err
-	}
-	return &newTodo[0], nil
+	todo.Id = todoId
+	return todo, nil
 }
 
 func (service *TodoService) UpdateTodo(ctx context.Context, todoRequest *model.TodoRequest, todoId int64) (*entity.Todo, error) {

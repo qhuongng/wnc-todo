@@ -16,23 +16,31 @@ func NewTodoRepository(db database.Db) repository.TodoRepository {
 	return &TodoRepository{db: db}
 }
 
-func (repo *TodoRepository) AddNewTodo(c context.Context, todo *entity.Todo) error {
+func (repo *TodoRepository) AddNewTodo(c context.Context, todo *entity.Todo) (int64, error) {
 	err := repo.db.WithContext(c).Create(todo).Error
 	if err != nil {
-		return err
+		return 0, err
 	}
-	return nil
+	return todo.Id, nil
 }
 
 func (repo *TodoRepository) UpdateTodo(c context.Context, todo *entity.Todo, todoId int64, userId int64) (*entity.Todo, error) {
-	if err := repo.db.WithContext(c).Model(&entity.Todo{Id: todoId, UserId: userId}).Updates(&todo).Error; err != nil {
+	// Cập nhật chỉ những bản ghi có todoId và userId được gửi vào
+	if err := repo.db.WithContext(c).
+		Model(&entity.Todo{}).
+		Where("id = ? AND user_id = ?", todoId, userId).
+		Updates(todo).Error; err != nil {
 		return nil, err
 	}
+
+	// Lấy bản ghi vừa cập nhật
 	var updatedTodo entity.Todo
-	err := repo.db.WithContext(c).First(&updatedTodo, todoId).Error
-	if err != nil {
+	if err := repo.db.WithContext(c).
+		Where("id = ? AND user_id = ?", todoId, userId).
+		First(&updatedTodo).Error; err != nil {
 		return nil, err
 	}
+
 	return &updatedTodo, nil
 }
 
