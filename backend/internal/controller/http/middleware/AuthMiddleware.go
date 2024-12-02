@@ -9,28 +9,35 @@ import (
 	"net/http"
 )
 
+type tokenRequest struct {
+	AccessToken  string `json:"access_token"`
+	RefreshToken string `json:"refresh_token"`
+}
+
 func VerifyTokenMiddleware(c *gin.Context) {
 	//accessToken, err := c.Request.Cookie("access_token")
 	accessToken := c.GetHeader("access_token")
-	if accessToken == "" {
-		c.AbortWithStatusJSON(http.StatusUnauthorized, http_common.NewErrorResponse(http_common.Error{
-			Message: "Missing access token", Field: "access_token", Code: http_common.ErrorResponseCode.Unauthorized,
-		}))
-		return
-	}
+	//var body *tokenRequest
+	//if err := c.ShouldBindJSON(&body); err != nil {
+	//	c.AbortWithStatusJSON(http.StatusBadRequest, http_common.NewErrorResponse(http_common.Error{
+	//		Message: "Missing token", Field: "token", Code: http_common.ErrorResponseCode.InvalidRequest,
+	//	}))
+	//	return
+	//}
+	//accessToken := body.AccessToken
+	//refreshToken := body.RefreshToken
+
+	//if !accessExists || !refreshExists {
+	//	c.AbortWithStatusJSON(http.StatusUnauthorized, http_common.NewErrorResponse(http_common.Error{
+	//		Message: "Missing token", Field: "token", Code: http_common.ErrorResponseCode.Unauthorized,
+	//	}))
+	//	return
+	//}
 	//check accesstoken
 	userId, err := authentication.VerifyToken(accessToken, "access")
 	if err != nil {
 		if errors.Is(err, jwt.ErrTokenExpired) {
-			//check refreshtoken
-			//refreshToken, err := c.Request.Cookie("refresh_token")
 			refreshToken := c.GetHeader("refresh_token")
-			if refreshToken == "" {
-				c.AbortWithStatusJSON(http.StatusUnauthorized, http_common.NewErrorResponse(http_common.Error{
-					Message: "Missing refresh token", Field: "refresh_token", Code: http_common.ErrorResponseCode.Unauthorized,
-				}))
-				return
-			}
 			userId, err = authentication.VerifyToken(refreshToken, "refresh")
 			if err != nil {
 				if errors.Is(err, jwt.ErrTokenExpired) {
