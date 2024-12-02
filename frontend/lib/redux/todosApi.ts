@@ -4,7 +4,11 @@ import { AppDispatch } from "../store";
 export const fetchTodos = () => async (dispatch: AppDispatch) => {
   dispatch(fetchTodosPending());
   try {
-    const response = await fetch('http://localhost:30001/api/v1/');
+    const response = await fetch("http://localhost:3001/api/v1/todos?filter=", {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+  });
     if (!response.ok) throw new Error('Failed to fetch todos');
     const data = await response.json();
     dispatch(fetchTodosSuccess(data));
