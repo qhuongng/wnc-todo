@@ -24,7 +24,7 @@ func InitializeContainer(db database.Db) *controller.ApiContainer {
 	userHandler := v1.NewUserHandler(userService)
 	todoRepository := repositoryimplement.NewTodoRepository(db)
 	todoService := serviceimplement.NewTodoService(todoRepository)
-	todoHandler := v1.NewTodoHandler(todoService)
+	todoHandler := v1.NewTodoHandler(todoService, userService)
 	server := http.NewServer(userHandler, todoHandler)
 	apiContainer := controller.NewApiContainer(server)
 	return apiContainer

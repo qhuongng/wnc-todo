@@ -43,7 +43,7 @@ func VerifyTokenMiddleware(c *gin.Context) {
 				return
 			}
 			c.Set("userId", userId)
-			c.Set("resetToken", true)
+			c.Set("resetAccessToken", true)
 		}
 		c.AbortWithStatusJSON(http.StatusUnauthorized, http_common.NewErrorResponse(http_common.Error{
 			Message: err.Error(), Field: "", Code: http_common.ErrorResponseCode.Unauthorized,
@@ -51,5 +51,5 @@ func VerifyTokenMiddleware(c *gin.Context) {
 		return
 	}
 	c.Set("userId", userId)
-	c.Set("resetToken", false)
+	c.Set("resetAccessToken", false)
 }
