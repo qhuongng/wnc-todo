@@ -18,18 +18,11 @@ func MapRoutes(router *gin.Engine, userHandler *UserHandler, todoHandler *TodoHa
 	//}))
 	v1 := router.Group("/api/v1")
 	{
-		users := v1.Group("/users")
-		{
-			users.POST("/register", userHandler.Register)
-			users.POST("/login", userHandler.Login)
-		}
-		todos := v1.Group("/todos")
-		todos.Use(middleware.VerifyTokenMiddleware)
-		{
-			todos.POST("/", todoHandler.Add)
-			todos.PUT("/:id", todoHandler.Update)
-			todos.GET("/", todoHandler.GetList)
-		}
+		v1.POST("/todos", middleware.VerifyTokenMiddleware, todoHandler.Add)
+		v1.PUT("/todos/:id", middleware.VerifyTokenMiddleware, todoHandler.Update)
+		v1.GET("/todos", middleware.VerifyTokenMiddleware, todoHandler.GetList)
+		v1.POST("/users/register", userHandler.Register)
+		v1.POST("/users/login", userHandler.Login)
 	}
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 }
