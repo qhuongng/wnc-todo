@@ -1,6 +1,7 @@
 import { setStatusPending, setStatusFailure, fetchTodosSuccess, markTodo } from "./todosSlice";
 import { AppDispatch } from "../store";
 import Cookies from "js-cookie";
+import { Todo } from "../todos";
 
 export const fetchTodos = () => async (dispatch: AppDispatch) => {
     dispatch(setStatusPending());
@@ -23,7 +24,7 @@ export const fetchTodos = () => async (dispatch: AppDispatch) => {
     }
 };
 
-export const updateTodo = (todo: { id: number; content: string; completed: boolean }) => async (dispatch: AppDispatch) => {
+export const updateTodo = (todo: Todo) => async (dispatch: AppDispatch) => {
     dispatch(setStatusPending());
     const accessToken = Cookies.get("accessToken");
     const refreshToken = Cookies.get("refreshToken");
