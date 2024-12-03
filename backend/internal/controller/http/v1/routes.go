@@ -10,10 +10,11 @@ import (
 func MapRoutes(router *gin.Engine, userHandler *UserHandler, todoHandler *TodoHandler) {
 	router.Use(middleware.CorsMiddleware())
 	//router.Use(cors.New(cors.Config{
-	//	AllowOrigins:     []string{"http://localhost:3000"},
+	//	AllowOrigins:     []string{"*"},
 	//	AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-	//	AllowHeaders:     []string{"Content-Type", "Authorization"},
+	//	AllowHeaders:     []string{"Content-Type", "Authorization", "access-token", "refresh-token"},
 	//	AllowCredentials: true,
+	//	MaxAge:           12 * time.Hour,
 	//}))
 	v1 := router.Group("/api/v1")
 	{
