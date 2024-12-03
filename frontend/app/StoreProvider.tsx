@@ -7,7 +7,7 @@ import { useRef } from "react";
 import { Provider } from "react-redux";
 
 import { makeStore, AppStore } from "@/lib/store";
-import { fetchTodos } from "@/lib/redux/todosSlice";
+import { fetchTodosSuccess } from "@/lib/redux/todosSlice";
 
 import Todos from "@/lib/todos";
 
@@ -17,7 +17,7 @@ const StoreProvider = ({ children }: { children: React.ReactNode }) => {
     if (!storeRef.current) {
         // Create the store instance the first time this renders
         storeRef.current = makeStore();
-        storeRef.current.dispatch(fetchTodos(Todos()));
+        storeRef.current.dispatch(fetchTodosSuccess(Todos()));
     }
 
     return <Provider store={storeRef.current}>{children}</Provider>;
