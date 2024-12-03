@@ -4,6 +4,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { Icon } from "@iconify/react";
 
 import { addTodo } from "@/lib/redux/todosSlice";
+import Cookies from "js-cookie";
 import { useAppDispatch } from "@/lib/hooks";
 
 interface TodoInput {
@@ -21,9 +22,39 @@ const TodoForm: React.FC = () => {
         formState: { errors },
     } = useForm<TodoInput>();
 
-    const onSubmit: SubmitHandler<TodoInput> = (data) => {
-        dispatch(addTodo(data.content));
-        reset();
+    const onSubmit: SubmitHandler<TodoInput> = async (data) => {
+        try {
+            const accessToken = Cookies.get("accessToken");
+            const refreshToken = Cookies.get("refreshToken");
+            const dataToAdd = {
+                content: data.content,
+                completed: false
+            }
+            const response = await fetch("http://localhost:3001/api/v1/todos", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    ...(accessToken && { access_token: accessToken }),
+                    ...(refreshToken && { refresh_token: refreshToken }),
+                },
+                body: JSON.stringify(dataToAdd),
+            });
+
+            if (response.ok) {
+                reset();
+                const responseData = await response.json();
+                Cookies.set("accessToken", responseData.data.access_token);
+                Cookies.set("refreshToken", responseData.data.refresh_token);
+                dispatch(addTodo(data.content));
+            } else {
+                console.log("lỗi rùi");
+                //const data = await response.json();
+                //setErrorMessage(data.message || "Thông tin đăng nhập không hợp lệ.");
+            }
+        } catch (error) {
+            //setErrorMessage("Đã xảy ra lỗi kết nối với máy chủ");
+        }
+
     };
 
     return (

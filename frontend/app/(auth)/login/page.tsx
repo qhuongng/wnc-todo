@@ -50,7 +50,6 @@ const Login: React.FC = () => {
         } catch (error) {
             setErrorMessage("Đã xảy ra lỗi kết nối với máy chủ");
         }
-
     };
 
     return (

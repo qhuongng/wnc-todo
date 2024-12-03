@@ -2,8 +2,7 @@
 
 import { useAppSelector, useAppDispatch } from "@/lib/hooks";
 import { RootState } from "@/lib/store";
-import { markTodo } from "@/lib/redux/todosSlice";
-import { fetchTodos } from "@/lib/redux/todosApi";
+import { fetchTodos, updateTodo } from "@/lib/redux/todosApi";
 import { useEffect } from "react";
 
 const TodoList = () => {
@@ -34,9 +33,8 @@ const TodoList = () => {
                         className="flex rounded-xl bg-slate-50 shadow-xl mb-4 px-4 items-center justify-between"
                     >
                         <p
-                            className={`font-semibold text-lg text-wrap ${
-                                todo.completed ? "text-slate-400 line-through" : "text-slate-800"
-                            }`}
+                            className={`font-semibold text-lg text-wrap ${todo.completed ? "text-slate-400 line-through" : "text-slate-800"
+                                }`}
                         >
                             {todo.content}
                         </p>
@@ -45,7 +43,7 @@ const TodoList = () => {
                             type="checkbox"
                             className="checkbox checkbox-lg checkbox-primary ml-4"
                             checked={todo.completed}
-                            onChange={() => dispatch(markTodo(todo.id))}
+                            onChange={() => dispatch(updateTodo(todo))}
                         />
                     </div>
                 ))

@@ -18,7 +18,7 @@ export const todosSlice = createSlice({
     name: "todos",
     initialState,
     reducers: {
-        fetchTodosPending: (state) => {
+        setStatusPending: (state) => {
             state.status = "pending";
         },
         fetchTodosSuccess: (state, action: PayloadAction<Array<Todo>>) => {
@@ -26,10 +26,11 @@ export const todosSlice = createSlice({
             state.todos = action.payload;
             state.filteredTodos = action.payload;
         },
-        fetchTodosFailure: (state) => {
+        setStatusFailure: (state) => {
             state.status = "failure";
         },
         addTodo: (state, action: PayloadAction<string>) => {
+            state.status = "success";
             const newTodo: Todo = {
                 id: state.todos.length + 1,
                 content: action.payload,
@@ -40,6 +41,7 @@ export const todosSlice = createSlice({
             state.filteredTodos.push(newTodo);
         },
         markTodo: (state, action: PayloadAction<number>) => {
+            state.status = "success";
             const todo = state.todos.find((todo: Todo) => todo.id === action.payload);
             const todoFromFiltered = state.filteredTodos.find(
                 (todo: Todo) => todo.id === action.payload
@@ -51,6 +53,7 @@ export const todosSlice = createSlice({
             }
         },
         filterTodo: (state, action: PayloadAction<string>) => {
+            state.status = "success";
             state.filteredTodos = state.todos.filter((todo: Todo) => {
                 return todo.content.toLowerCase().includes(action.payload.toLowerCase());
             });
@@ -60,8 +63,8 @@ export const todosSlice = createSlice({
 
 export const {
     fetchTodosSuccess,
-    fetchTodosFailure,
-    fetchTodosPending,
+    setStatusPending,
+    setStatusFailure,
     addTodo,
     markTodo,
     filterTodo,
