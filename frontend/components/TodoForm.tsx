@@ -6,6 +6,7 @@ import { Icon } from "@iconify/react";
 import { addTodo } from "@/lib/redux/todosSlice";
 import Cookies from "js-cookie";
 import { useAppDispatch } from "@/lib/hooks";
+import { Todo } from "@/lib/todos";
 
 interface TodoInput {
     content: string;
@@ -45,7 +46,12 @@ const TodoForm: React.FC = () => {
                 const responseData = await response.json();
                 Cookies.set("accessToken", responseData.data.access_token);
                 Cookies.set("refreshToken", responseData.data.refresh_token);
-                dispatch(addTodo(data.content));
+                const newTodo: Todo = {
+                    id: responseData.data.id,
+                    content: responseData.data.content,
+                    completed: responseData.data.completed
+                }
+                dispatch(addTodo(newTodo));
             } else {
                 console.log("lỗi rùi");
                 //const data = await response.json();

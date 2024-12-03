@@ -29,16 +29,10 @@ export const todosSlice = createSlice({
         setStatusFailure: (state) => {
             state.status = "failure";
         },
-        addTodo: (state, action: PayloadAction<string>) => {
+        addTodo: (state, action: PayloadAction<Todo>) => {
             state.status = "success";
-            const newTodo: Todo = {
-                id: state.todos.length + 1,
-                content: action.payload,
-                completed: false,
-            };
-
-            state.todos.push(newTodo);
-            state.filteredTodos.push(newTodo);
+            state.todos.push(action.payload);
+            state.filteredTodos.push(action.payload);
         },
         markTodo: (state, action: PayloadAction<number>) => {
             state.status = "success";

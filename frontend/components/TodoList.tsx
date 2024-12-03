@@ -37,6 +37,7 @@ const TodoList = () => {
                                 }`}
                         >
                             {todo.content}
+                            <p>{todo.id}</p>
                         </p>
 
                         <input
