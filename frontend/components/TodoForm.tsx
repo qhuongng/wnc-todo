@@ -15,6 +15,7 @@ interface TodoInput {
 const TodoForm: React.FC = () => {
     const dispatch = useAppDispatch();
 
+
     const {
         register,
         handleSubmit,
@@ -44,8 +45,6 @@ const TodoForm: React.FC = () => {
             if (response.ok) {
                 reset();
                 const responseData = await response.json();
-                Cookies.set("accessToken", responseData.data.access_token);
-                Cookies.set("refreshToken", responseData.data.refresh_token);
                 const newTodo: Todo = {
                     id: responseData.data.id,
                     content: responseData.data.content,
@@ -53,12 +52,11 @@ const TodoForm: React.FC = () => {
                 }
                 dispatch(addTodo(newTodo));
             } else {
-                console.log("lỗi rùi");
-                //const data = await response.json();
-                //setErrorMessage(data.message || "Thông tin đăng nhập không hợp lệ.");
+                const data = await response.json();
+                alert(data.message || "Đã xảy ra lỗi trong quá trình thêm. Hãy thử lại sau");
             }
         } catch (error) {
-            //setErrorMessage("Đã xảy ra lỗi kết nối với máy chủ");
+            alert("Đã xảy ra lỗi trong quá trình thêm. Hãy thử lại sau");
         }
 
     };
