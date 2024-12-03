@@ -17,10 +17,11 @@ func NewTodoService(todoRepository repository.TodoRepository) service.TodoServic
 }
 
 func (service *TodoService) AddNewTodo(ctx context.Context, todoRequest *model.TodoRequest) (*entity.Todo, error) {
+	value := false
 	todo := &entity.Todo{
 		Content:   todoRequest.Content,
 		UserId:    todoRequest.UserId,
-		Completed: false,
+		Completed: &value,
 	}
 	todoId, err := service.todoRepository.AddNewTodo(ctx, todo)
 	if err != nil {

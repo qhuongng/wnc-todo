@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/qhuongng/wnc-todo/tree/add-redux/backend/internal/domain/entity"
 	"github.com/qhuongng/wnc-todo/tree/add-redux/backend/internal/domain/http_common"
@@ -79,12 +80,14 @@ func (handler *TodoHandler) Update(c *gin.Context) {
 		return
 	}
 	var req *model.TodoRequest
+
 	if err := c.ShouldBind(&req); err != nil {
 		c.JSON(http.StatusBadRequest, http_common.NewErrorResponse(http_common.Error{
 			Message: err.Error(), Field: "", Code: http_common.ErrorResponseCode.InvalidRequest,
 		}))
 		return
 	}
+	fmt.Print(req)
 	userId, exists := c.Get("userId")
 	if !exists {
 		c.JSON(http.StatusInternalServerError, http_common.NewErrorResponse(http_common.Error{
