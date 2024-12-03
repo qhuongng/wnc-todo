@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/qhuongng/wnc-todo/tree/add-redux/backend/internal/domain/entity"
 	"os"
 	"time"
 )
@@ -11,10 +12,10 @@ import (
 var secretKeyAccess = os.Getenv("JWT_ACCESS_SECRET_KEY")
 var secretKeyRefresh = os.Getenv("JWT_REFRESH_SECRET_KEY")
 
-func GenerateToken(userId int64, expTime time.Time, tokenType string) (string, error) {
+func GenerateToken(user *entity.User, expTime time.Time, tokenType string) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256,
 		jwt.MapClaims{
-			"userId": userId,
+			"userId": user.Id,
 			"exp":    expTime.Unix(),
 		})
 	var key string
@@ -34,7 +35,6 @@ func GenerateToken(userId int64, expTime time.Time, tokenType string) (string, e
 }
 func VerifyToken(tokenString string, tokenType string) (int64, error) {
 	var key string
-
 	if tokenType == "access" {
 		key = secretKeyAccess
 	} else if tokenType == "refresh" {
@@ -44,6 +44,9 @@ func VerifyToken(tokenString string, tokenType string) (int64, error) {
 	}
 
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+		}
 		return []byte(key), nil
 	})
 
@@ -59,6 +62,7 @@ func VerifyToken(tokenString string, tokenType string) (int64, error) {
 		}
 	}
 	if claims, ok := token.Claims.(jwt.MapClaims); ok {
+		fmt.Println(claims)
 		if userIdFloat, ok := claims["userId"].(float64); ok {
 			userId := int64(userIdFloat)
 			return userId, nil

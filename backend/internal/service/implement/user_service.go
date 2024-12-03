@@ -71,7 +71,7 @@ func (service *UserService) CreateToken(ctx context.Context, userId int64, token
 	}
 	if tokenType == "refresh" {
 		refreshTokenTime := time.Now().Add(constants.REFRESH_TOKEN_DURATION)
-		refreshToken, err := authentication.GenerateToken(userId, refreshTokenTime, "refresh")
+		refreshToken, err := authentication.GenerateToken(currentUser, refreshTokenTime, "refresh")
 		if err != nil {
 			return "", err
 		}
@@ -84,7 +84,7 @@ func (service *UserService) CreateToken(ctx context.Context, userId int64, token
 		return refreshToken, nil
 	} else if tokenType == "access" {
 		accessTokenTime := time.Now().Add(constants.ACCESS_TOKEN_DURATION)
-		accessToken, err := authentication.GenerateToken(userId, accessTokenTime, "access")
+		accessToken, err := authentication.GenerateToken(currentUser, accessTokenTime, "access")
 		if err != nil {
 			return "", err
 		}

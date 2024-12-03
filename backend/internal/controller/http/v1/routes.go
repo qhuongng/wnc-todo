@@ -9,18 +9,20 @@ import (
 
 func MapRoutes(router *gin.Engine, userHandler *UserHandler, todoHandler *TodoHandler) {
 	router.Use(middleware.CorsMiddleware())
+	//router.Use(cors.New(cors.Config{
+	//	AllowOrigins:     []string{"*"},
+	//	AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+	//	AllowHeaders:     []string{"Content-Type", "Authorization", "access-token", "refresh-token"},
+	//	AllowCredentials: true,
+	//	MaxAge:           12 * time.Hour,
+	//}))
 	v1 := router.Group("/api/v1")
 	{
-		users := v1.Group("/users")
-		{
-			users.POST("/register", userHandler.Register)
-			users.POST("/login", userHandler.Login)
-		}
-		todos := v1.Group("/todos")
-		todos.Use(middleware.VerifyTokenMiddleware)
-		{
-			todos.POST("/", todoHandler.Add)
-		}
+		v1.POST("/todos", middleware.VerifyTokenMiddleware, todoHandler.Add)
+		v1.PUT("/todos/:id", middleware.VerifyTokenMiddleware, todoHandler.Update)
+		v1.GET("/todos", middleware.VerifyTokenMiddleware, todoHandler.GetList)
+		v1.POST("/users/register", userHandler.Register)
+		v1.POST("/users/login", userHandler.Login)
 	}
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 }

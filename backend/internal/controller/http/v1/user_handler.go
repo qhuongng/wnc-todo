@@ -5,12 +5,17 @@ import (
 	"github.com/qhuongng/wnc-todo/tree/add-redux/backend/internal/domain/http_common"
 	"github.com/qhuongng/wnc-todo/tree/add-redux/backend/internal/domain/model"
 	"github.com/qhuongng/wnc-todo/tree/add-redux/backend/internal/service"
-	"github.com/qhuongng/wnc-todo/tree/add-redux/backend/utils/constants"
 	"net/http"
 )
 
 type UserHandler struct {
 	userService service.UserService
+}
+
+type LoginResponse struct {
+	Username     string `json:"username"`
+	AccessToken  string `json:"access_token"`
+	RefreshToken string `json:"refresh_token"`
 }
 
 func NewUserHandler(userService service.UserService) *UserHandler {
@@ -51,10 +56,14 @@ func (handler *UserHandler) Login(c *gin.Context) {
 		return
 	}
 	// set access token
-	c.SetCookie("access_token", accessToken, constants.COOKIE_DURATION, "/", "", false, true)
+	c.Header("access_token", accessToken)
 	// set refresh token
-	c.SetCookie("refresh_token", user.RefeshToken, constants.COOKIE_DURATION, "/", "", false, true)
-	c.JSON(http.StatusOK, http_common.NewSuccessResponse[string](&user.Username))
+	c.Header("refresh_token", user.RefeshToken)
+	//c.SetCookie("access_token", accessToken, constants.COOKIE_DURATION, "/", "", false, true)
+	//// set refresh token
+	//c.SetCookie("refresh_token", user.RefeshToken, constants.COOKIE_DURATION, "/", "", false, true)
+
+	c.JSON(http.StatusOK, http_common.NewSuccessResponse[LoginResponse](&LoginResponse{Username: user.Username, AccessToken: accessToken, RefreshToken: user.RefeshToken}))
 }
 
 // @Summary Register
@@ -89,8 +98,16 @@ func (handler *UserHandler) Register(c *gin.Context) {
 		}))
 		return
 	}
-	c.SetCookie("access_token", accessToken, constants.COOKIE_DURATION, "/", "", false, true)
+	// set access token
+	c.Header("access_token", accessToken)
 	// set refresh token
-	c.SetCookie("refresh_token", user.RefeshToken, constants.COOKIE_DURATION, "/", "", false, true)
-	c.JSON(http.StatusOK, http_common.NewSuccessResponse[string](&user.Username))
+	c.Header("refresh_token", user.RefeshToken)
+	//c.SetCookie("access_token", accessToken, constants.COOKIE_DURATION, "/", "", false, true)
+	//// set refresh token
+	//c.SetCookie("refresh_token", user.RefeshToken, constants.COOKIE_DURATION, "/", "", false, true)
+	c.JSON(http.StatusOK, http_common.NewSuccessResponse[LoginResponse](&LoginResponse{Username: user.Username, AccessToken: accessToken, RefreshToken: user.RefeshToken}))
+}
+
+func (handler *UserHandler) Logout(c *gin.Context) {
+
 }

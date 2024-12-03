@@ -17,18 +17,37 @@ func NewTodoService(todoRepository repository.TodoRepository) service.TodoServic
 }
 
 func (service *TodoService) AddNewTodo(ctx context.Context, todoRequest *model.TodoRequest) (*entity.Todo, error) {
+	value := false
 	todo := &entity.Todo{
 		Content:   todoRequest.Content,
 		UserId:    todoRequest.UserId,
-		Completed: false,
+		Completed: &value,
 	}
-	err := service.todoRepository.AddNewTodo(ctx, todo)
+	todoId, err := service.todoRepository.AddNewTodo(ctx, todo)
 	if err != nil {
 		return nil, err
 	}
-	newTodo, err := service.todoRepository.GetListTodo(ctx, todoRequest.UserId, todoRequest.Content)
+	todo.Id = todoId
+	return todo, nil
+}
+
+func (service *TodoService) UpdateTodo(ctx context.Context, todoRequest *model.TodoRequest, todoId int64) (*entity.Todo, error) {
+	todo := &entity.Todo{
+		Content:   todoRequest.Content,
+		UserId:    todoRequest.UserId,
+		Completed: todoRequest.Completed,
+	}
+	updateTodo, err := service.todoRepository.UpdateTodo(ctx, todo, todoId, todoRequest.UserId)
 	if err != nil {
 		return nil, err
 	}
-	return &newTodo[0], nil
+	return updateTodo, nil
+}
+
+func (service *TodoService) GetListTodo(ctx context.Context, userId int64, searchText string) ([]entity.Todo, error) {
+	todoList, err := service.todoRepository.GetListTodo(ctx, userId, searchText)
+	if err != nil {
+		return nil, err
+	}
+	return todoList, nil
 }
