@@ -1,8 +1,8 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useForm, SubmitHandler } from "react-hook-form";
 import Link from "next/link";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/lib/hooks";
 import { setUsername } from "@/lib/redux/userSlice";
 import { useState } from "react";
@@ -59,7 +59,7 @@ const Login: React.FC = () => {
                 <form className="mt-4" onSubmit={handleSubmit(onSubmit)}>
                     <div className="mb-4">
                         <label htmlFor="username" className="block text-sm font-medium text-gray-600">
-                            Email
+                            Tên đăng nhập
                             <span className="text-red-500 ml-1">*</span>
                         </label>
                         <input
